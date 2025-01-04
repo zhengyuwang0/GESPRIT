@@ -22,12 +22,12 @@ for it = 1:1:length(coeff)
             theta_true = [0,pi/4];
             n = N-1;
             delta = 1;
-            P1 = [2,0.8;0.8,2];
+            P = [2,0.8;0.8,2];
         case 'closely'
             theta_true = [0,0.8*2*pi/N];
             n = floor(2*N/3);
             delta = floor(N/3);
-            P1 = 2*[1,0;0,1];
+            P = 2*[1,0;0,1];
     end
     k = length(theta_true);
     clear i
@@ -102,17 +102,24 @@ ylabel('MSE(dB)');
 clear; clc;
 N = 80;
 T  = 160;
-c = N/T;   % sqrt(0.25)=0.5
+c = N/T;   
 CNT = 500;
-n = floor(2*N/3);
-delta = floor(N/3);
-% delta = 1;
-% n = N-1;
-theta_true = [0,0.8*2*pi/N];
-% theta_true = [0,pi/4];
+
+testcase = 'widely'; 
+switch testcase
+    case 'widely'
+        theta_true = [0,pi/4];
+        n = N-1;
+        delta = 1;
+        P = [2,0.8;0.8,2];
+    case 'closely'
+        theta_true = [0,0.8*2*pi/N];
+        n = floor(2*N/3);
+        delta = floor(N/3);
+        P = 2*[1,0;0,1];
+end
+
 k = length(theta_true);
-P = 2*[1,0;0,1];
-% P = [2, 0.8;0.8,2];
 
 clear i
 a = @(theta) exp(1i*theta*(0:N-1)')/sqrt(N);
