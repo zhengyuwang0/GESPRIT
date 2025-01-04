@@ -2,9 +2,6 @@
 clear; clc
 sigma2 = 1;
 nb_Loop = 200;
-% P = [2, 0.8;0.8,2];
-P = 2*[1,0;0,1];
-% theta_true = [0,pi/4];
 
 coeff = 1:1:5;
 ESPRIT_MSE = zeros(nb_Loop,length(coeff));
@@ -15,15 +12,23 @@ GESPRIT_estimate = zeros(2,nb_Loop);
 
 for it = 1:1:length(coeff)
     N = 50*2^(coeff(it));
-    n = floor(2*N/3);
-    delta = floor(N/3);
-    % delta = 1;
-    % n = N-1;
-    
     T  = 2*N;
     c = N/T;
-    theta_true = [0,0.8*2*pi/N];
-%     theta_true = [0,pi/4];
+
+    testcase = 'widely';   % or closely
+
+    switch testcase
+        case 'widely'
+            theta_true = [0,pi/4];
+            n = N-1;
+            delta = 1;
+            P1 = [2,0.8;0.8,2];
+        case 'closely'
+            theta_true = [0,0.8*2*pi/N];
+            n = floor(2*N/3);
+            delta = floor(N/3);
+            P1 = 2*[1,0;0,1];
+    end
     k = length(theta_true);
     clear i
     a = @(theta) exp(1i*theta*(0:N-1)')/sqrt(N);
